@@ -20,15 +20,18 @@ namespace WindowsFormsApp1
     {
         public const string CLIENT_ID = "4f2dfd6d40018d4";
         public const string CLIENT_SECRET = "edb012d5aeda108335089de54b9f8c913e142aef";
+        public string[] files = null;
         public Form1()
         {
             InitializeComponent();
+            button1.Enabled = false;
         }
 
         private async void button1_Click(object sender, EventArgs e)
         {
             try
             {
+                var file = files[0];
                 var client = new ImgurClient(CLIENT_ID, CLIENT_SECRET);
                 var endpoint = new ImageEndpoint(client);
                 IImage image;
@@ -42,6 +45,38 @@ namespace WindowsFormsApp1
             {
                 Debug.Write("An error occurred uploading an image to Imgur.");
                 Debug.Write(imgurEx.Message);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    files = Directory.GetFiles(fbd.SelectedPath);
+                    button1.Enabled = true;
+                    label2.Text = fbd.SelectedPath;
+                    System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
+                }
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    files = Directory.GetFiles(fbd.SelectedPath);
+                    button1.Enabled = true;
+                    label4.Text = fbd.SelectedPath;
+                    System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
+                }
             }
         }
     }
